@@ -9,20 +9,31 @@
 class Mandela
 {
 
-    public $size = 500;
-    public $points = 30;
 
     /**
      * @param $size: integer value size of image should be between 10 to 1000
      * @param $points: integer value number of points should be between 10 ti 100
      */
-    public function mandela_img($size,$points){
-        if($size < 1 || $size > 1024){
-            echo "please , Inter size number between 10 to 1000";
-// Test the number of points
+
+    public static function check_in_data($size,$points){
+        if($size < 100 || $size > 1024){
+            echo "please , Inter size number between 100 to 1000";
+            return false;
+        // Test the number of points
         }elseif($points < 1 || $points > 100){
             echo "please , Inter points number between 10 to 100";
+            return false;
         }else{
+            return true;
+        }
+    }
+
+    /**
+     * @param $size
+     * @param $points
+     */
+    public static function mandela_img($size, $points){
+        if(self::check_in_data($size,$points)){
             //Set the position of the circle by radius
             $radius = $size/2;
             // Find the number of degrees between points (in radians)
@@ -37,31 +48,25 @@ class Mandela
             imagefill($im, 0, 0, $background);
             // Set the color of the lines black
             $lines = imagecolorallocate($im, 0, 0, 0);
-
-
             // Until we have made our way around the circle
             while($angle < deg2rad(360)){
                 // Increase the angle to point to the next point
                 $angle = $angle + $degrees;
-
                 // Find the new points
                 $x = $radius * cos($angle) + $offset;
                 $y = $radius * sin($angle) + $offset;
                 // Add those points to the array of points
                 $pointsArr[] = array($x, $y);
             }
-
             // For each point
             while($from = array_pop($pointsArr)){
                 // For each point that has not yet been plotted
                 foreach($pointsArr as $to){
                     // Draw a line
-
                     imagerectangle($im, $from[0], $from[1], $to[0], $to[1], $lines);
                     imageline($im, $from[0], $from[1], $to[0], $to[1], $lines);
                 }
             }
-
             // Output the image
             header ("Content-type: image/png");
             imagepng($im);
@@ -74,12 +79,9 @@ class Mandela
      * @param $size: integer value size of image should be between 10 to 1000
      * @param $points: integer value number of points should be between 10 ti 100
      */
-    public function mandela_img_not_Symmetrically($size, $points){
-        if($size < 1 || $size > 1024){
-            echo "please , Inter size number between 10 to 1000";
-        }elseif($points < 1 || $points > 100){
-            echo "please , Inter points number between 10 to 100";
-        }else{
+    public static function mandela_img_not_Symmetrically($size, $points){
+
+        if(self::check_in_data($size,$points)){
             $radius = $size/2;
             $degrees = deg2rad(180/$points);
             $offset = $size/2;
@@ -97,7 +99,6 @@ class Mandela
                 $y = $radius * sin($angle) + $offset;
                 $pointsArr[] = array($x, $y);
             }
-
             // For each point
             while($from = array_pop($pointsArr)){
                 foreach($pointsArr as $to){
@@ -143,12 +144,8 @@ class Mandela
      * @param $size: integer value size of image should be between 10 to 1000
      * @param $points: integer value number of points should be between 10 ti 100
      */
-    public function mandela_img_crazy($size,$points){
-        if($size < 1 || $size > 1024){
-            echo "please , Inter size number between 10 to 1000";
-        }elseif($points < 1 || $points > 100){
-            echo "please , Inter points number between 10 to 100";
-        }else{
+    public static function mandela_img_crazy($size,$points){
+        if(self::check_in_data($size,$points)){
 
             $radius = $size/2;
             $degrees = deg2rad(360/$points);
